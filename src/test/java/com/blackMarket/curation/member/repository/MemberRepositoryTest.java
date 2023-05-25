@@ -1,8 +1,9 @@
 package com.blackMarket.curation.member.repository;
 
-import com.blackMarket.curation.member.domain.Member;
-import com.blackMarket.curation.member.domain.Role;
-import com.blackMarket.curation.member.exception.MemberNotfoundException;
+import com.blackMarket.curation.domain.member.domain.Member;
+import com.blackMarket.curation.domain.member.domain.Role;
+import com.blackMarket.curation.domain.member.exception.MemberNotfoundException;
+import com.blackMarket.curation.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
