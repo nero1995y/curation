@@ -1,4 +1,4 @@
-package com.blackMarket.curation.member.exception;
+package com.blackMarket.curation.domain.member.exception;
 
 public class MemberNotfoundException extends GlobalException {
     private static final String MESSAGE = "존재하지 않는 멤버입니다.";

@@ -1,8 +1,8 @@
-package com.blackMarket.curation.member.controller;
+package com.blackMarket.curation.domain.member.controller;
 
-import com.blackMarket.curation.member.dto.MemberRequestDto;
-import com.blackMarket.curation.member.dto.MemberResponseDto;
-import com.blackMarket.curation.member.serivce.MemberService;
+import com.blackMarket.curation.domain.member.dto.MemberRequestDto;
+import com.blackMarket.curation.domain.member.dto.MemberResponseDto;
+import com.blackMarket.curation.domain.member.serivce.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,12 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("api/members")
+    @PostMapping("api/member")
     public ResponseEntity<MemberResponseDto> createMember(
             @RequestBody @Valid MemberRequestDto memberRequestDto) {
 
-        memberService.create(memberRequestDto.toEntity());
+        MemberResponseDto response = memberService.create(memberRequestDto.toEntity());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(response);
     }
 }

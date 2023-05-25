@@ -1,4 +1,4 @@
-package com.blackMarket.curation.member.exception;
+package com.blackMarket.curation.domain.member.exception;
 
 public class MemberDuplicatedException extends GlobalException {
     private static final String MESSAGE = "member id 가 중복됩니다.";

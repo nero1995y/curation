@@ -1,6 +1,6 @@
-package com.blackMarket.curation.member.repository;
+package com.blackMarket.curation.domain.member.repository;
 
-import com.blackMarket.curation.member.domain.Member;
+import com.blackMarket.curation.domain.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

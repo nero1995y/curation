@@ -1,8 +1,10 @@
-package com.blackMarket.curation.member.exception;
+package com.blackMarket.curation.domain.member.exception;
+
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@Getter
 public abstract class GlobalException extends RuntimeException {
 
     public final Map<String, String> validation = new HashMap<>();

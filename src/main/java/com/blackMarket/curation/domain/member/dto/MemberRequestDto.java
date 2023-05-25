@@ -1,7 +1,7 @@
-package com.blackMarket.curation.member.dto;
+package com.blackMarket.curation.domain.member.dto;
 
-import com.blackMarket.curation.member.domain.Member;
-import com.blackMarket.curation.member.domain.Role;
+import com.blackMarket.curation.domain.member.domain.Member;
+import com.blackMarket.curation.domain.member.domain.Role;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;

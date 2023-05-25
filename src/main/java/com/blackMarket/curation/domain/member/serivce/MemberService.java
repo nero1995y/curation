@@ -1,9 +1,9 @@
-package com.blackMarket.curation.member.serivce;
+package com.blackMarket.curation.domain.member.serivce;
 
-import com.blackMarket.curation.member.domain.Member;
-import com.blackMarket.curation.member.dto.MemberResponseDto;
-import com.blackMarket.curation.member.exception.MemberDuplicatedException;
-import com.blackMarket.curation.member.repository.MemberRepository;
+import com.blackMarket.curation.domain.member.domain.Member;
+import com.blackMarket.curation.domain.member.dto.MemberResponseDto;
+import com.blackMarket.curation.domain.member.exception.MemberDuplicatedException;
+import com.blackMarket.curation.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

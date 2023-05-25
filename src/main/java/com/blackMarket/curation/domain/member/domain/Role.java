@@ -1,4 +1,4 @@
-package com.blackMarket.curation.member.domain;
+package com.blackMarket.curation.domain.member.domain;
 
 public enum Role {
     UNVALIDATED,
