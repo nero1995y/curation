@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -79,4 +81,46 @@ class MemberRepositoryTest {
         //then
         assertThat(findMember).isEqualTo(member);
     }
+
+    @DisplayName("Member 조회 결과가 0이다.")
+    @Test
+    void memberSize() {
+        //given
+
+        //when
+        List<Member> result = memberRepository.findAll();
+
+        //then
+        assertThat(result.size()).isEqualTo(0);
+
+    }
+
+    @DisplayName("Member 조회 결과가 2이다.")
+    @Test
+    void memberSize2() {
+        //given
+        Member member = Member.builder()
+                .username("nero")
+                .nickname("nero12")
+                .password("12345")
+                .role(Role.MEMBER)
+                .build();
+
+        Member member2 = Member.builder()
+                .username("nero2")
+                .nickname("nero123")
+                .password("12345")
+                .role(Role.MEMBER)
+                .build();
+
+        memberRepository.save(member);
+        memberRepository.save(member2);
+
+        //when
+        List<Member> result = memberRepository.findAll();
+
+        //then
+        assertThat(result.size()).isEqualTo(2);
+    }
+
 }

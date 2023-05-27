@@ -4,6 +4,7 @@ import com.blackMarket.curation.domain.member.domain.Member;
 import com.blackMarket.curation.domain.member.domain.Role;
 import com.blackMarket.curation.domain.member.dto.MemberResponseDto;
 import com.blackMarket.curation.domain.member.exception.MemberDuplicatedException;
+import com.blackMarket.curation.domain.member.exception.MemberNotfoundException;
 import com.blackMarket.curation.domain.member.repository.MemberRepository;
 import com.blackMarket.curation.domain.member.serivce.MemberService;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +31,7 @@ class MemberServiceTest {
     @InjectMocks
     MemberService memberService;
 
-    private final String memberId = "memberId";
+    private final Long memberId = -1L;
     private final String nickname = "nero12";
 
     private final Member member = Member.builder()
@@ -38,7 +41,7 @@ class MemberServiceTest {
             .role(Role.MEMBER)
             .build();
 
-    @DisplayName("Memeber를 저장이 실패한다. 이미 존재함")
+    @DisplayName("멤버 저장이 실패한다. 이미 존재함")
     @Test
     void createFail() {
         //given
@@ -52,7 +55,7 @@ class MemberServiceTest {
                 .isInstanceOf(MemberDuplicatedException.class);
     }
 
-    @DisplayName("Member를 등록한다")
+    @DisplayName("멤버를 등록한다")
     @Test
     void create() {
 
@@ -80,5 +83,52 @@ class MemberServiceTest {
         assertThat(result).isNotNull();
         verify(memberRepository, times(1)).findByNickname(nickname);
         verify(memberRepository, times(1)).save(any());
+    }
+
+    @DisplayName("멤버 목록 조회한다.")
+    @Test
+    void memberLit() {
+        //given
+        List<Member> list = Arrays.asList(
+                Member.builder().build(),
+                Member.builder().build(),
+                Member.builder().build());
+
+        doReturn(list)
+                .when(memberRepository)
+                .findAll();
+        //when
+        List<MemberResponseDto> result = memberService.getList();
+
+        //then
+        assertThat(result.size()).isEqualTo(3);
+    }
+
+    @DisplayName("맴버 상세 조회 실패 예외 발생")
+    @Test
+    void memberDetailNull() {
+        //given
+        doReturn(Optional.empty())
+                .when(memberRepository)
+                .findById(memberId);
+
+        //when then
+        assertThatThrownBy(() ->memberService.getDetail(memberId))
+                .isInstanceOf(MemberNotfoundException.class);
+    }
+
+    @DisplayName("멤버 상세 조회 성공")
+    @Test
+    void memberDetailSuccess() {
+        //given
+        doReturn(Optional.of(member))
+                .when(memberRepository)
+                .findById(memberId);
+
+        //when
+        MemberResponseDto result = memberService.getDetail(memberId);
+
+        //then
+        assertThat(result.getUsername()).isEqualTo(member.getUsername());
     }
 }
