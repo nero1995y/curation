@@ -6,9 +6,9 @@ import com.blackMarket.curation.domain.member.serivce.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +23,17 @@ public class MemberController {
         MemberResponseDto response = memberService.create(memberRequestDto.toEntity());
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/members")
+    public ResponseEntity<List<MemberResponseDto>> getList() {
+        return ResponseEntity.ok(memberService.getList());
+    }
+
+    @GetMapping("/api/member/{id}")
+    public ResponseEntity<MemberResponseDto> getDetail(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(memberService.getDetail(id));
     }
 }
