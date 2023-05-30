@@ -36,4 +36,10 @@ public class MemberController {
 
         return ResponseEntity.ok(memberService.getDetail(id));
     }
+
+    @DeleteMapping("/api/member/{id}")
+    public ResponseEntity<Void> remove(@PathVariable Long id) {
+        memberService.remove(id);
+        return ResponseEntity.noContent().build();
+    }
 }

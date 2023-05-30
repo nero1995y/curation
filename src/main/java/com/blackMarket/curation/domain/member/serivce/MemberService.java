@@ -60,4 +60,11 @@ public class MemberService {
                 .role(member.getRole())
                 .build();
     }
+
+    public void remove(Long memberId) {
+        memberRepository.findById(memberId)
+                .orElseThrow(MemberNotfoundException::new);
+
+        memberRepository.deleteById(memberId);
+    }
 }
