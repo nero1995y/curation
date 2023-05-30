@@ -131,4 +131,33 @@ class MemberServiceTest {
         //then
         assertThat(result.getUsername()).isEqualTo(member.getUsername());
     }
+
+    @DisplayName("멤버삭제 실패 존재하지 않는다")
+    @Test
+    void deleteFail() {
+        //given
+        doReturn(Optional.empty())
+                .when(memberRepository)
+                .findById(memberId);
+
+        //when //then
+        assertThatThrownBy(()-> memberService.remove(memberId))
+                .isInstanceOf(MemberNotfoundException.class);
+    }
+
+    @DisplayName("멤버 삭제")
+    @Test
+    void sample() {
+        //given
+        doReturn(Optional.of(member))
+                .when(memberRepository)
+                .findById(memberId);
+
+        //when
+        memberService.remove(memberId);
+
+        //then
+        verify(memberRepository, times(1)).findById(memberId);
+        verify(memberRepository, times(1)).deleteById(memberId);
+    }
 }

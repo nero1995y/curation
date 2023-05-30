@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 class MemberRepositoryTest {
@@ -123,4 +125,25 @@ class MemberRepositoryTest {
         assertThat(result.size()).isEqualTo(2);
     }
 
+    @DisplayName("맴버 삭제된다")
+    @Test
+    void sample() {
+        //given
+        Member member = Member.builder()
+                .username("nero")
+                .nickname("nero12")
+                .password("12345")
+                .role(Role.MEMBER)
+                .build();
+
+        Member save = memberRepository.save(member);
+
+        //when
+        memberRepository.deleteById(save.getId());
+
+        //then
+        Optional<Member> findMember = memberRepository.findById(member.getId());
+
+        assertThat(findMember).isEmpty();
+    }
 }

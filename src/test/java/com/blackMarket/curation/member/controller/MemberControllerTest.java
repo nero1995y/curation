@@ -25,8 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.doThrow;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,7 +79,7 @@ class MemberControllerTest {
         actions.andExpect(status().isBadRequest());
     }
 
-    @DisplayName("맴버 등록 성공한다")
+    @DisplayName("멤버 등록 성공한다")
     @Test
     void createSuccess() throws Exception {
         //given
@@ -148,7 +147,7 @@ class MemberControllerTest {
                 .andDo(print());
     }
 
-    @DisplayName("맴버 상세 조회 성공")
+    @DisplayName("멤버 상세 조회 성공")
     @Test
     void getDetailSuccess() throws Exception {
         //given
@@ -168,6 +167,23 @@ class MemberControllerTest {
                 .andDo(print());
 
     }
+
+    @DisplayName("멤버삭제 성공")
+    @Test
+    void removeSuccess() throws Exception {
+        //given
+        String url = "/api/member/{id}";
+
+        //when
+        ResultActions actions = mockMvc.perform(delete(url, -1));
+
+        //then
+        actions.andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+
+
 
     private MemberRequestDto getMemberRequestDto() {
         return MemberRequestDto.builder()
