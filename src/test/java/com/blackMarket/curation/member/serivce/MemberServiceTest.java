@@ -147,7 +147,7 @@ class MemberServiceTest {
 
     @DisplayName("멤버 삭제")
     @Test
-    void sample() {
+    void remove() {
         //given
         doReturn(Optional.of(member))
                 .when(memberRepository)
@@ -159,5 +159,56 @@ class MemberServiceTest {
         //then
         verify(memberRepository, times(1)).findById(memberId);
         verify(memberRepository, times(1)).deleteById(memberId);
+    }
+
+
+
+    @DisplayName("맴버 업데이트 실패 유저없음")
+    @Test
+    void updateFail() {
+        //given
+        Member updateMember = Member.builder()
+                .id(1L)
+                .username("updateUsername")
+                .nickname("updateNickname")
+                .password("12345")
+                .role(Role.MEMBER)
+                .build();
+
+
+        doReturn(Optional.empty())
+                .when(memberRepository)
+                .findById(memberId);
+
+        //when then
+        assertThatThrownBy(()-> memberService.update(memberId, updateMember))
+                .isInstanceOf(MemberNotfoundException.class);
+    }
+
+    @DisplayName("맴버 업데이트 성공")
+    @Test
+    void updateSuccess() {
+        //given
+        Member updateMember = Member.builder()
+                .id(1L)
+                .username("updateUsername")
+                .nickname("updateNickname")
+                .password("12345")
+                .role(Role.MEMBER)
+                .build();
+
+        doReturn(Optional.of(member))
+                .when(memberRepository)
+                .findById(memberId);
+
+        //when
+        memberService.update(memberId, updateMember);
+
+        //then
+        MemberResponseDto detail = memberService.getDetail(memberId);
+
+        assertThat(detail.getNickname()).isEqualTo(updateMember.getNickname());
+
+        verify(memberRepository, times(2)).findById(memberId);
     }
 }

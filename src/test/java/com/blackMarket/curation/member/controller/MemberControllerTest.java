@@ -4,6 +4,7 @@ import com.blackMarket.curation.domain.member.controller.MemberController;
 import com.blackMarket.curation.domain.member.domain.Role;
 import com.blackMarket.curation.domain.member.dto.MemberRequestDto;
 import com.blackMarket.curation.domain.member.dto.MemberResponseDto;
+import com.blackMarket.curation.domain.member.dto.MemberUpdateRequestDto;
 import com.blackMarket.curation.domain.member.exception.MemberDuplicatedException;
 import com.blackMarket.curation.domain.member.exception.MemberNotfoundException;
 import com.blackMarket.curation.domain.member.serivce.MemberService;
@@ -23,7 +24,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.doThrow;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -182,7 +183,52 @@ class MemberControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("멤버 업데이트 실패 업데이트 id 없음 ")
+    @Test
+    void updateFail() throws Exception {
+        //given
+        String url = "/api/member/{id}";
 
+        doThrow(new MemberNotfoundException())
+                .when(memberService)
+                .update(any(),any());
+
+        //when
+        ResultActions actions = mockMvc.perform(patch(url, -1)
+                .content(gson.toJson(null))
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions.andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @DisplayName("멥버 업데이트 성공")
+    @Test
+    void updateSuccess() throws Exception {
+        //given
+        String url = "/api/member/{id}";
+
+        MemberUpdateRequestDto request = MemberUpdateRequestDto.builder()
+                .username("updateUsername")
+                .build();
+
+        doNothing()
+                .when(memberService)
+                .update(-1L,request.toEntity());
+
+
+        //when
+        ResultActions actions = mockMvc.perform(patch(url, -1)
+                .content(gson.toJson(request))
+                .contentType(APPLICATION_JSON));
+
+        //then
+        actions.andExpect(status().isNoContent())
+                .andDo(print());
+
+        verify(memberService,times(1)).update(any(),any());
+    }
 
 
     private MemberRequestDto getMemberRequestDto() {
