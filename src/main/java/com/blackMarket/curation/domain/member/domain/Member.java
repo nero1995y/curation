@@ -41,8 +41,27 @@ public class Member {
     }
 
     public void update(Member member) {
-        this.username = member.getUsername();
-        this.nickname = member.getNickname();
-        this.password = member.getPassword();
+        updateNickname(member.getNickname());
+        updateName(member.getUsername());
+        updatePassword(member.getPassword());
     }
+
+    private void updateNickname(String nickname) {
+        if (!nickname.isEmpty()) {
+            this.nickname = nickname;
+        }
+    }
+
+    private void updateName(String username) {
+        if (!username.isEmpty()) {
+            this.username = username;
+        }
+    }
+
+    private void updatePassword(String password) {
+        if (!password.isEmpty()) {
+            this.password = password;
+        }
+    }
+
 }

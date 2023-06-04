@@ -2,6 +2,7 @@ package com.blackMarket.curation.domain.member.controller;
 
 import com.blackMarket.curation.domain.member.dto.MemberRequestDto;
 import com.blackMarket.curation.domain.member.dto.MemberResponseDto;
+import com.blackMarket.curation.domain.member.dto.MemberUpdateRequestDto;
 import com.blackMarket.curation.domain.member.serivce.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("api/member")
+    @PostMapping("/api/member")
     public ResponseEntity<MemberResponseDto> createMember(
             @RequestBody @Valid MemberRequestDto memberRequestDto) {
 
@@ -40,6 +41,12 @@ public class MemberController {
     @DeleteMapping("/api/member/{id}")
     public ResponseEntity<Void> remove(@PathVariable Long id) {
         memberService.remove(id);
+        return ResponseEntity.noContent().build();
+    }
+    @PatchMapping("/api/member/{id}")
+    public ResponseEntity<Void> update(@PathVariable Long id,
+                                       MemberUpdateRequestDto requestDto) {
+        memberService.update(id, requestDto.toEntity());
         return ResponseEntity.noContent().build();
     }
 }

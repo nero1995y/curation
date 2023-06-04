@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MemberRequestDto {
+public class MemberUpdateRequestDto {
 
     @NotNull
     private String username;
@@ -20,14 +20,19 @@ public class MemberRequestDto {
     @NotNull
     private String password;
 
+    @NotNull
+    private Role role;
+
     @Builder
-    public MemberRequestDto(String username,
-                            String nickname,
-                            String password) {
+    public MemberUpdateRequestDto(String username,
+                                  String nickname,
+                                  String password,
+                                  Role role) {
 
         this.username = username;
         this.nickname = nickname;
         this.password = password;
+        this.role = role;
     }
 
     public Member toEntity() {
@@ -35,7 +40,7 @@ public class MemberRequestDto {
                 .username(this.username)
                 .nickname(this.nickname)
                 .password(this.password)
-                .role(Role.MEMBER)
+                .role(this.role)
                 .build();
     }
 }
