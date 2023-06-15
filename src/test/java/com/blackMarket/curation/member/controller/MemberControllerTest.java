@@ -1,7 +1,6 @@
 package com.blackMarket.curation.member.controller;
 
 import com.blackMarket.curation.domain.member.controller.MemberController;
-import com.blackMarket.curation.domain.member.domain.Role;
 import com.blackMarket.curation.domain.member.dto.MemberRequestDto;
 import com.blackMarket.curation.domain.member.dto.MemberResponseDto;
 import com.blackMarket.curation.domain.member.dto.MemberUpdateRequestDto;
@@ -236,7 +235,6 @@ class MemberControllerTest {
                 .username("testUsername")
                 .nickname("testNickname")
                 .password("testPassword")
-                .role(Role.MEMBER)
                 .build();
     }
 }
