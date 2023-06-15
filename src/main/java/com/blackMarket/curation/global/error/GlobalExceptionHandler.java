@@ -1,6 +1,6 @@
 package com.blackMarket.curation.global.error;
 
-import com.blackMarket.curation.domain.member.exception.GlobalException;
+import com.blackMarket.curation.global.error.exception.GlobalException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

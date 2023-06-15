@@ -1,4 +1,4 @@
-package com.blackMarket.curation.domain.member.exception;
+package com.blackMarket.curation.global.error.exception;
 
 import lombok.Getter;
 
