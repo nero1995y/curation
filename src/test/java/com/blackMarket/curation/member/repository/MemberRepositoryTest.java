@@ -126,7 +126,7 @@ class MemberRepositoryTest {
 
     @DisplayName("맴버 삭제된다")
     @Test
-    void sample() {
+    void remove() {
         //given
         Member member = Member.builder()
                 .username("nero")
