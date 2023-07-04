@@ -6,7 +6,6 @@ import com.blackMarket.curation.domain.member.exception.MemberDuplicatedExceptio
 import com.blackMarket.curation.domain.member.exception.MemberNotfoundException;
 import com.blackMarket.curation.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +61,7 @@ public class MemberService {
                 .build();
     }
 
+    @Transactional
     public void remove(Long memberId) {
         memberRepository.findById(memberId)
                 .orElseThrow(MemberNotfoundException::new);

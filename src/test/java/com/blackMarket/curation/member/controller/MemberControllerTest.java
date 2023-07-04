@@ -182,7 +182,7 @@ class MemberControllerTest {
                 .andDo(print());
     }
 
-    @DisplayName("멤버 업데이트 실패 업데이트 id 없음 ")
+    @DisplayName("멤버 업데이트 실패 업데이트 id 없음")
     @Test
     void updateFail() throws Exception {
         //given
