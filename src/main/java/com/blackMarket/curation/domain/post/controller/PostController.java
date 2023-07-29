@@ -3,7 +3,6 @@ package com.blackMarket.curation.domain.post.controller;
 import com.blackMarket.curation.domain.post.dto.PostResponseDto;
 import com.blackMarket.curation.domain.post.dto.PostSaveRequestDto;
 import com.blackMarket.curation.domain.post.dto.PostUpdateRequestDto;
-import com.blackMarket.curation.domain.post.exception.PostNotfoundException;
 import com.blackMarket.curation.domain.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,8 @@ public class PostController {
     public ResponseEntity<PostResponseDto> create(
             @RequestBody @Valid PostSaveRequestDto postSaveRequestDto) {
 
-        PostResponseDto response = postService.create(postSaveRequestDto.toEntity());
+        PostResponseDto response = postService.create(postSaveRequestDto.toEntity(),
+                postSaveRequestDto.getMemberId());
 
         return ResponseEntity.ok(response);
     }
@@ -45,7 +45,7 @@ public class PostController {
 
     @PatchMapping("/api/post/{id}")
     public ResponseEntity<Void> update(@PathVariable Long id,
-                                       PostUpdateRequestDto requestDto) {
+                                       @RequestBody PostUpdateRequestDto requestDto) {
         postService.update(id, requestDto.toEntity());
         return ResponseEntity.noContent().build();
     }

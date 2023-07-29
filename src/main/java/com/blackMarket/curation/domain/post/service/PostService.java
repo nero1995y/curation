@@ -1,14 +1,15 @@
 package com.blackMarket.curation.domain.post.service;
 
+import com.blackMarket.curation.domain.member.domain.Member;
+import com.blackMarket.curation.domain.member.exception.MemberNotfoundException;
+import com.blackMarket.curation.domain.member.repository.MemberRepository;
+import com.blackMarket.curation.domain.member.serivce.MemberService;
 import com.blackMarket.curation.domain.post.domain.Post;
 import com.blackMarket.curation.domain.post.dto.PostResponseDto;
 import com.blackMarket.curation.domain.post.exception.PostDuplicatedException;
 import com.blackMarket.curation.domain.post.exception.PostNotfoundException;
 import com.blackMarket.curation.domain.post.repository.PostRepository;
-import com.blackMarket.curation.global.common.CustomPageRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,13 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final CustomPageRequest customPageRequest;
+    private final MemberService memberService;
 
     @Transactional
-    public PostResponseDto create(Post post) {
+    public PostResponseDto create(Post post, Long memberId) {
+
+        Member member = memberService.getMember(memberId);
+        post.changeMember(member);
 
         postRepository
                 .findByTitle(post.getTitle())

@@ -50,8 +50,7 @@ public class MemberService {
 
     public MemberResponseDto getDetail(Long memberId) {
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotfoundException::new);
+        Member member = getMember(memberId);
 
         return MemberResponseDto.builder()
                 .id(member.getId())
@@ -59,6 +58,11 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .role(member.getRole())
                 .build();
+    }
+
+    public Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(MemberNotfoundException::new);
     }
 
     @Transactional
