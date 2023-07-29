@@ -2,6 +2,7 @@ package com.blackMarket.curation.domain.post.service;
 
 import com.blackMarket.curation.domain.member.domain.Member;
 import com.blackMarket.curation.domain.member.domain.Role;
+import com.blackMarket.curation.domain.member.serivce.MemberService;
 import com.blackMarket.curation.domain.post.domain.Post;
 import com.blackMarket.curation.domain.post.dto.PostResponseDto;
 import com.blackMarket.curation.domain.post.exception.PostDuplicatedException;
@@ -30,6 +31,9 @@ class PostServiceTest {
     @Mock
     PostRepository postRepository;
 
+    @Mock
+    MemberService memberService;
+
     @InjectMocks
     PostService postService;
 
@@ -55,13 +59,13 @@ class PostServiceTest {
                 .findByTitle(post.getTitle());
 
         //when then
-        assertThatThrownBy(()-> postService.create(post))
+        assertThatThrownBy(()-> postService.create(post, member.getId()))
                 .isInstanceOf(PostDuplicatedException.class);
     }
 
     @DisplayName("게시글을 저장한다")
     @Test
-    void sample() {
+    void createSuccess() {
         //given
         Post post = Post.builder()
                 .member(member)
@@ -77,8 +81,12 @@ class PostServiceTest {
                 .when(postRepository)
                 .save(any());
 
+        doReturn(member.getId())
+                .when(memberService)
+                .getMember(any());
+
         //when
-        PostResponseDto result = postService.create(post);
+        PostResponseDto result = postService.create(post, member.getId());
 
         //then
         assertThat(result).isNotNull();
