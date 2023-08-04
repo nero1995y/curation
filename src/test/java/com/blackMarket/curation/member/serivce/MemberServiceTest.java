@@ -113,7 +113,7 @@ class MemberServiceTest {
                 .findById(memberId);
 
         //when then
-        assertThatThrownBy(() ->memberService.getDetail(memberId))
+        assertThatThrownBy(() -> memberService.getDetail(memberId))
                 .isInstanceOf(MemberNotfoundException.class);
     }
 
