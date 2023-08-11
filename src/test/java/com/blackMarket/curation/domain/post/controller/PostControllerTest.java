@@ -44,6 +44,7 @@ class PostControllerTest {
                 .title("테스트 제목")
                 .content("테스트 내용")
                 .memberId(-1L)
+                .categoryId(-1L)
                 .build();
     }
 
@@ -72,7 +73,7 @@ class PostControllerTest {
 
         doThrow(new PostDuplicatedException())
                 .when(postService)
-                .create(getPostRequestDto().toEntity(), getPostRequestDto().getMemberId());
+                .create(getPostRequestDto());
 
         //when
         ResultActions actions = mockMvc.perform(post(url)
@@ -94,7 +95,7 @@ class PostControllerTest {
 
         doReturn(response)
                 .when(postService)
-                .create(any(), any());
+                .create(any());
 
         //when
         ResultActions actions = mockMvc.perform(post(url)

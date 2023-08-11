@@ -1,11 +1,14 @@
 package com.blackMarket.curation.domain.post.service;
 
+import com.blackMarket.curation.domain.category.domain.Category;
+import com.blackMarket.curation.domain.category.servcie.CategoryService;
 import com.blackMarket.curation.domain.member.domain.Member;
 import com.blackMarket.curation.domain.member.exception.MemberNotfoundException;
 import com.blackMarket.curation.domain.member.repository.MemberRepository;
 import com.blackMarket.curation.domain.member.serivce.MemberService;
 import com.blackMarket.curation.domain.post.domain.Post;
 import com.blackMarket.curation.domain.post.dto.PostResponseDto;
+import com.blackMarket.curation.domain.post.dto.PostSaveRequestDto;
 import com.blackMarket.curation.domain.post.exception.PostDuplicatedException;
 import com.blackMarket.curation.domain.post.exception.PostNotfoundException;
 import com.blackMarket.curation.domain.post.repository.PostRepository;
@@ -23,12 +26,20 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final MemberService memberService;
+    private final CategoryService categoryService;
 
     @Transactional
-    public PostResponseDto create(Post post, Long memberId) {
+    public PostResponseDto create(PostSaveRequestDto postSaveRequestDto) {
+
+        Post post = postSaveRequestDto.toEntity();
+        Long memberId = postSaveRequestDto.getMemberId();
+        Long categoryId = postSaveRequestDto.getCategoryId();
 
         Member member = memberService.getMember(memberId);
         post.changeMember(member);
+
+        Category category = categoryService.getCategory(categoryId);
+        post.changeCategory(category);
 
         postRepository
                 .findByTitle(post.getTitle())

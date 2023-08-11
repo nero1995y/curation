@@ -1,10 +1,13 @@
 package com.blackMarket.curation.domain.post.service;
 
+import com.blackMarket.curation.domain.category.domain.Category;
+import com.blackMarket.curation.domain.category.servcie.CategoryService;
 import com.blackMarket.curation.domain.member.domain.Member;
 import com.blackMarket.curation.domain.member.domain.Role;
 import com.blackMarket.curation.domain.member.serivce.MemberService;
 import com.blackMarket.curation.domain.post.domain.Post;
 import com.blackMarket.curation.domain.post.dto.PostResponseDto;
+import com.blackMarket.curation.domain.post.dto.PostSaveRequestDto;
 import com.blackMarket.curation.domain.post.exception.PostDuplicatedException;
 import com.blackMarket.curation.domain.post.exception.PostNotfoundException;
 import com.blackMarket.curation.domain.post.repository.PostRepository;
@@ -34,6 +37,9 @@ class PostServiceTest {
     @Mock
     MemberService memberService;
 
+    @Mock
+    CategoryService categoryService;
+
     @InjectMocks
     PostService postService;
 
@@ -44,22 +50,27 @@ class PostServiceTest {
             .role(Role.MEMBER)
             .build();
 
+    private final Category category = Category.builder()
+            .name("develop")
+            .build();
+
     @DisplayName("게시글 저장이 실패한다 이미 존재함")
     @Test
     void createFail() {
         //given
-        Post post = Post.builder()
-                .member(member)
+        PostSaveRequestDto requestDto = PostSaveRequestDto.builder()
                 .title("postTitle")
                 .content("content")
+                .memberId(-2L)
+                .categoryId(-3L)
                 .build();
 
-        doReturn(Optional.of(post))
+        doReturn(Optional.of(requestDto.toEntity()))
                 .when(postRepository)
-                .findByTitle(post.getTitle());
+                .findByTitle(requestDto.getTitle());
 
         //when then
-        assertThatThrownBy(()-> postService.create(post, member.getId()))
+        assertThatThrownBy(()-> postService.create(requestDto))
                 .isInstanceOf(PostDuplicatedException.class);
     }
 
@@ -67,17 +78,18 @@ class PostServiceTest {
     @Test
     void createSuccess() {
         //given
-        Post post = Post.builder()
-                .member(member)
+        PostSaveRequestDto requestDto = PostSaveRequestDto.builder()
                 .title("postTitle")
                 .content("content")
+                .memberId(-2L)
+                .categoryId(-3L)
                 .build();
 
         doReturn(Optional.empty())
                 .when(postRepository)
-                .findByTitle(post.getTitle());
+                .findByTitle(requestDto.getTitle());
 
-        doReturn(post)
+        doReturn(requestDto.toEntity())
                 .when(postRepository)
                 .save(any());
 
@@ -85,13 +97,17 @@ class PostServiceTest {
                 .when(memberService)
                 .getMember(any());
 
+        doReturn(category)
+                .when(categoryService)
+                .getCategory(any());
+
         //when
-        PostResponseDto result = postService.create(post, member.getId());
+        PostResponseDto result = postService.create(requestDto);
 
         //then
         assertThat(result).isNotNull();
         verify(postRepository, times(1))
-                .findByTitle(post.getTitle());
+                .findByTitle(requestDto.getTitle());
         verify(postRepository, times(1)).save(any());
 
     }

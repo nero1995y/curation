@@ -18,12 +18,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/api/post")
-    public ResponseEntity<PostResponseDto> create(
-            @RequestBody @Valid PostSaveRequestDto postSaveRequestDto) {
+    public ResponseEntity<PostResponseDto> create(@RequestBody @Valid PostSaveRequestDto postSaveRequestDto) {
 
-        PostResponseDto response = postService.create(postSaveRequestDto.toEntity(),
-                postSaveRequestDto.getMemberId());
-
+        PostResponseDto response = postService.create(postSaveRequestDto);
         return ResponseEntity.ok(response);
     }
 

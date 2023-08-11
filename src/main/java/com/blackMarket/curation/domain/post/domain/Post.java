@@ -1,5 +1,6 @@
 package com.blackMarket.curation.domain.post.domain;
 
+import com.blackMarket.curation.domain.category.domain.Category;
 import com.blackMarket.curation.domain.member.domain.Member;
 import com.blackMarket.curation.global.error.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -26,11 +27,15 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
     @Builder
     public Post(Long id,
                 String title,
                 String content,
-                Member member) {
+                Member member,
+                Category category) {
 
         this.id = id;
         this.title = title;
@@ -40,10 +45,18 @@ public class Post extends BaseTimeEntity {
         if(member !=null) {
             changeMember(member);
         }
+
+        if(category != null) {
+            changeCategory(category);
+        }
     }
 
     public void changeMember(Member member) {
         this.member = member;
+    }
+
+    public void changeCategory(Category category) {
+        this.category = category;
     }
 
     public void update(Post post) {
