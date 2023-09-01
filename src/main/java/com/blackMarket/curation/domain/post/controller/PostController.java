@@ -6,6 +6,8 @@ import com.blackMarket.curation.domain.post.dto.PostUpdateRequestDto;
 import com.blackMarket.curation.domain.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +27,8 @@ public class PostController {
     }
 
     @GetMapping("/api/posts")
-    public ResponseEntity<List<PostResponseDto>> getList() {
-        return ResponseEntity.ok(postService.getList());
+    public ResponseEntity<Page<PostResponseDto>> getList(Pageable pageable) {
+        return ResponseEntity.ok(postService.getList(pageable));
     }
 
     @GetMapping("/api/post/{id}")

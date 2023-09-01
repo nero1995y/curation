@@ -18,6 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -121,16 +125,20 @@ class PostServiceTest {
                 Post.builder().build(),
                 Post.builder().build());
 
-        doReturn(list)
+        PageRequest pageRequest = PageRequest.of(0, 3);
+        Page<Post> resultList = new PageImpl<>(list, pageRequest, 3);
+
+        doReturn(resultList)
                 .when(postRepository)
-                .findAll();
+                .findAll((Pageable) any());
 
         //when
-        List<PostResponseDto> result = postService.getList();
+        Page<PostResponseDto> result = postService.getList(any());
 
+        int size = result.stream().toList().size();
 
         //then
-        assertThat(result.size()).isEqualTo(3);
+        assertThat(size).isEqualTo(3);
     }
 
 

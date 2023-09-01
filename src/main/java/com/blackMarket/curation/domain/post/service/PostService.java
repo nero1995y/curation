@@ -13,6 +13,10 @@ import com.blackMarket.curation.domain.post.exception.PostDuplicatedException;
 import com.blackMarket.curation.domain.post.exception.PostNotfoundException;
 import com.blackMarket.curation.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,20 +56,18 @@ public class PostService {
         return new PostResponseDto(save);
     }
 
-    public List<PostResponseDto> getList() {
+    public Page<PostResponseDto> getList(Pageable pageable) {
 
-        List<Post> list = postRepository.findAll();
+        Page<Post> list = postRepository.findAll(pageable);
 
-        return list.stream()
-                .map(post -> PostResponseDto.builder()
+
+        return list.map(post -> PostResponseDto.builder()
                         .id(post.getId())
                         .title(post.getTitle())
                         .content(post.getContent())
                         .modifiedDate(post.getModifiedDate())
                         .createDate(post.getCreateDate())
-                        .build()
-                )
-                .collect(Collectors.toList());
+                        .build());
     }
 
     public PostResponseDto getDetail(Long postId) {

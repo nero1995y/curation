@@ -1,5 +1,6 @@
 package com.blackMarket.curation.domain.post.controller;
 
+import com.blackMarket.curation.domain.post.domain.Post;
 import com.blackMarket.curation.domain.post.dto.PostResponseDto;
 import com.blackMarket.curation.domain.post.dto.PostSaveRequestDto;
 import com.blackMarket.curation.domain.post.dto.PostUpdateRequestDto;
@@ -12,6 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -120,11 +124,13 @@ class PostControllerTest {
                 PostResponseDto.builder().build(),
                 PostResponseDto.builder().build()
         );
+        PageRequest pageRequest = PageRequest.of(0, 2);
 
-        doReturn(list)
+        Page<PostResponseDto> resultList = new PageImpl<>(list, pageRequest, 3);
+
+        doReturn(resultList)
                 .when(postService)
-                .getList();
-
+                .getList(pageRequest);
         //when
         ResultActions actions = mockMvc.perform(get(url));
 

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -83,11 +85,14 @@ class PostRepositoryTest {
 
         postRepository.save(post);
         postRepository.save(post2);
-        //when
-        List<Post> result = postRepository.findAll();
 
+        PageRequest pageRequest = PageRequest.of(0, 2);
+        //when
+        Page<Post> result = postRepository.findAll(pageRequest);
+
+        List<Post> list = result.stream().toList();
         //then
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(list.size()).isEqualTo(2);
     }
 
     @DisplayName("게시글이 삭제된다")
